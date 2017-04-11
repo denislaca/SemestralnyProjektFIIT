@@ -1,17 +1,23 @@
 package Models.Sklad;
 
+import Controllers.TrucksTablePopulator;
 import Models.Sklad.Sklad;
 import Models.Tovar.Tovar;
 import Models.Truck.HeavyTruck;
 import Models.Truck.OrdinaryTruck;
+import Models.Truck.Truck;
+import com.intellij.ui.speedSearch.ElementFilter;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by Denis-iMac on 2.4.17.
  */
 public class Dispecing {
-    private ArrayList<Sklad> CentralneSklady = new ArrayList<>(0);
+    private ArrayList<Sklad> CentralneSklady;
+    private Vector<Truck> ActiveTrucks;
 
     public Dispecing(){
         addCentralneSklady("Bratislava");
@@ -23,7 +29,10 @@ public class Dispecing {
         addCentralneSklady("Banska Bystrica");
         addCentralneSklady("Presov");
         addCentralneSklady("Kosice");
+        CentralneSklady = new ArrayList<>(0);
+        ActiveTrucks = new Vector<>(0);
     }
+
     //-------METHODS-------
     public void moveItem(Sklad fromWarehouse, Sklad toWarehouse, int itemIndex){
         Tovar temp = fromWarehouse.getNaskladneny_tovar().get(itemIndex);
@@ -35,12 +44,19 @@ public class Dispecing {
         for(int i = 0; i<CentralneSklady.size(); i++) {
             Sklad sklad = getSklady(i);
             while(sklad.getNaskladneny_tovarSize()>0) {
-                sklad.sendTrucks(new OrdinaryTruck());
-                sklad.sendTrucks(new HeavyTruck());
-                sklad.sendTrucks(new OrdinaryTruck());
+                ActiveTrucks.addAll(sklad.sendTrucks(new OrdinaryTruck()));
+                ActiveTrucks.addAll(sklad.sendTrucks(new HeavyTruck()));
+                ActiveTrucks.addAll(sklad.sendTrucks(new OrdinaryTruck()));
             }
-
         }
+    }
+
+    public ObservableList<Truck> parseForView(Vector<Truck> trucks){
+        TrucksTablePopulator populator = new TrucksTablePopulator();
+        for(Truck truck : trucks){
+            populator.setTableData(truck);
+        }
+        return populator.getTableData();
     }
     //-------METHODS-------
 
@@ -56,6 +72,11 @@ public class Dispecing {
     public Sklad getSklady(int index){
         return CentralneSklady.get(index);
     }
+
+    public Vector<Truck> getActiveTrucks() {
+        return ActiveTrucks;
+    }
+
     //-------GETTERS-------
 
     //-------SETTERS-------

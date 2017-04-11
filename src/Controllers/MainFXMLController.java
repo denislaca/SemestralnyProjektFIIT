@@ -29,11 +29,11 @@ public class MainFXMLController implements Initializable{
     @FXML public TextField priceInput;
     @FXML public TableView<Tovar> warehouseTableController;
     @FXML public TableView<Truck> trucksTableController;
-    @FXML public TableColumn<Tovar, String> itemIDColumn;
-    @FXML public TableColumn<Tovar, String> weightColumn;
-    @FXML public TableColumn<Tovar, String> itemDestinationColumn;
-    @FXML public TableColumn<Tovar, String> priceColumn;
-    @FXML public TableColumn<Tovar, String> dateColumn;
+    @FXML public TableColumn<Tovar, String> warehouseItemIDColumn;
+    @FXML public TableColumn<Tovar, String> warehouseWeightColumn;
+    @FXML public TableColumn<Tovar, String> warehouseItemDestinationColumn;
+    @FXML public TableColumn<Tovar, String> warehousePriceColumn;
+    @FXML public TableColumn<Tovar, String> warehouseDateColumn;
 
     private Tovar tempTovar;
     private Dispecing dispecing;
@@ -52,11 +52,11 @@ public class MainFXMLController implements Initializable{
         list.add("Presov");
         list.add("Kosice");
 
-        itemIDColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("idColumnProperty"));
-        weightColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("itemWeightColumnProperty"));
-        itemDestinationColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("itemDestinationColumnProperty"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("priceColumnProperty"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("dateColumnProperty"));
+        warehouseItemIDColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("idColumnProperty"));
+        warehouseWeightColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("itemWeightColumnProperty"));
+        warehouseItemDestinationColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("itemDestinationColumnProperty"));
+        warehousePriceColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("priceColumnProperty"));
+        warehouseDateColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("dateColumnProperty"));
 
         ObservableList warehouseList = FXCollections.observableList(list);
         ObservableList warehouseObList = FXCollections.observableList(list);
@@ -92,6 +92,11 @@ public class MainFXMLController implements Initializable{
         obList.setAll(populator.filter(populator.getTableData(),warehouseChoiceButton.getValue().toString()));
         if(obList.size()>0)
             warehouseTableController.setItems(obList);
+    }
+
+    public void ActivateTrucks(){
+        dispecing.activateTrucks();
+        trucksTableController.setItems(dispecing.parseForView(dispecing.getActiveTrucks()));
     }
 
 

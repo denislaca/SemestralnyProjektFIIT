@@ -39,16 +39,17 @@
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
                                     <Button fx:id="inspectWarehouseButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Inspect Item" />
-                                    <TableView fx:id="warehouseTableController" layoutX="5.0" prefHeight="335.0" prefWidth="526.0">
+                                     <Button fx:id="sendTrucksButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Send Trucks" />
+                                     <TableView fx:id="warehouseTableController" layoutX="5.0" prefHeight="335.0" prefWidth="526.0">
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
                                        <columns>
-                                          <TableColumn fx:id="itemIDColumn" prefWidth="75.0" text="Item ID" />
-                                          <TableColumn fx:id="weightColumn" prefWidth="75.0" text="Weight" />
-                                          <TableColumn fx:id="itemDestinationColumn" prefWidth="75.0" text="Destination" />
-                                          <TableColumn fx:id="priceColumn" prefWidth="120.57034301757812" text="Price" />
-                                          <TableColumn fx:id="dateColumn" prefWidth="63.429718017578125" text="Date" />
+                                          <TableColumn fx:id="warehouseItemIDColumn" prefWidth="75.0" text="Item ID" />
+                                          <TableColumn fx:id="warehouseWeightColumn" prefWidth="75.0" text="Weight" />
+                                          <TableColumn fx:id="warehouseItemDestinationColumn" prefWidth="75.0" text="Destination" />
+                                          <TableColumn fx:id="warehousePriceColumn" prefWidth="120.57034301757812" text="Price" />
+                                          <TableColumn fx:id="warehouseDateColumn" prefWidth="63.429718017578125" text="Date" />
                                        </columns>
                                        <opaqueInsets>
                                           <Insets />
@@ -63,7 +64,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="requestTruckButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Request Truck" />
+                                    <Button fx:id="requestTruckButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" onAction="#ActivateTrucks" text="Request Truck" />
                                     <Button fx:id="inspectTruckButton" layoutX="550.0" layoutY="20.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Inspect Truck" textAlignment="CENTER" />
                                     <TableView fx:id="trucksTableController" layoutX="5.0" prefHeight="335.0" prefWidth="526.0">
                                        <columnResizePolicy>

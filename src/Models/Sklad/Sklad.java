@@ -29,10 +29,11 @@ public class Sklad {
     }
     //-------METHODS-------
         //NEEDS WORK
-    public void sendTrucks(Truck truck){
+    public Vector<Truck> sendTrucks(Truck truck){
         for(int i = 0; i<naskladneny_tovar.size(); i++)
             truck.loadTruck(getNaskladneny_tovar().get(i));
         vyslane_dodavky.add(truck);
+        return vyslane_dodavky;
     }
     //-------METHODS-------
 
