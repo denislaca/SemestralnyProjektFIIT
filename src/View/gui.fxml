@@ -38,7 +38,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="inspectWarehouseButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Inspect Item" />
+                                    <Button fx:id="inspectWarehouseButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" onAction="#EditItem" text="Inspect Item" />
                                      <Button fx:id="sendTrucksButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Send Trucks" />
                                      <TableView fx:id="warehouseTableController" layoutX="5.0" prefHeight="335.0" prefWidth="526.0">
                                        <columnResizePolicy>
