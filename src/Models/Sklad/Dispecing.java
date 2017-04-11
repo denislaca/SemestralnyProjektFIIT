@@ -20,6 +20,8 @@ public class Dispecing {
     private Vector<Truck> ActiveTrucks;
 
     public Dispecing(){
+        CentralneSklady = new ArrayList<>(0);
+        ActiveTrucks = new Vector<>(0);
         addCentralneSklady("Bratislava");
         addCentralneSklady("Banska Bystica");
         addCentralneSklady("Kosice");
@@ -29,8 +31,6 @@ public class Dispecing {
         addCentralneSklady("Banska Bystrica");
         addCentralneSklady("Presov");
         addCentralneSklady("Kosice");
-        CentralneSklady = new ArrayList<>(0);
-        ActiveTrucks = new Vector<>(0);
     }
 
     //-------METHODS-------
