@@ -6,15 +6,25 @@ import Models.Tovar.Tovar;
 import Models.Truck.Truck;
 import javafx.collections.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Hlavny controller
+ */
 public class MainFXMLController implements Initializable{
     @FXML public Button calcPriceButton;
     @FXML public Button addWaresButton;
@@ -78,7 +88,7 @@ public class MainFXMLController implements Initializable{
         warehouseChoiceBox.getItems().clear();
         warehouseChoiceBox.setItems(warehouseList);
         warehouseChoiceBox.setValue("Bratislava");
-
+        customerConsole.clear();
         dispecing = new Dispecing();
         populator = new TrucksTablePopulator();
         System.out.println("Done Initializing FXML");
@@ -104,14 +114,6 @@ public class MainFXMLController implements Initializable{
         System.out.println("Done CalculatePrice");
     }
 
-    /*private int kapacita;
-    private int rychlost;
-    private int zataz;
-    private Vector<Tovar> nalozenyTovar;
-    private int time;
-    private Timer timer = new Timer();
-    */
-
     public void ActivateTrucks(){
         warehouseTableController.getItems().clear();
         dispecing.activateTrucks(warehouseChoiceBox.getValue().toString());
@@ -124,14 +126,37 @@ public class MainFXMLController implements Initializable{
 
     }
 
+    /**
+     * Vytvori nove okno v ktorom je mozne upravit vybrany tovar.
+     */
     public void EditItem(){
-        TablePosition selected = warehouseTableController.getFocusModel().getFocusedCell();
-        warehouseTableController.edit(selected.getRow(),selected.getTableColumn());
-            //REmodel this line
-        //Tovar tovar = selected.getTableColumn().getCellData(selected.getColumn());
+        int indexTovar = warehouseTableController.getSelectionModel().getSelectedIndex();
+        if(indexTovar == -1) {
+            System.out.println("No item selected");
+            return;
+        }
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../View/inspect.fxml"));
+            fxmlLoader.setController(new InspectController(warehouseTableController, warehouseChoiceBox, dispecing));
+            Parent root = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Inspect Item");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("Selected item at index " + Integer.toString(indexTovar));
+
 
     }
 
+    /**
+     * Vyfiltruje tovar pre vybrany sklad
+     */
     public void FilterList(){
         int index = dispecing.getIntexOfSklad(warehouseChoiceBox.getValue().toString());
         Sklad sklad = dispecing.getSklady(index);
@@ -141,6 +166,9 @@ public class MainFXMLController implements Initializable{
 
     }
 
+    /**
+     * Prida tovar do vybraneho skladu
+     */
     public void addTovar(){
         System.out.println("Start addTovar");
         if(tempTovar == null){
@@ -172,6 +200,10 @@ public class MainFXMLController implements Initializable{
         sklad.ObserveLast();
         System.out.println("Done addTovar");
         warehouseTableController.setItems(sklad.getTableData());
+        //dolezity riadok -
+        warehouseChoiceBox.getSelectionModel().getSelectedItem();
+        warehouseChoiceBox.getSelectionModel().getSelectedIndex();
+        // koniec dolezitym riadkom
         System.out.println("Done AddToTable");
     }
 

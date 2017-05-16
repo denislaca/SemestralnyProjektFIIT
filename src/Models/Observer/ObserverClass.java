@@ -19,6 +19,11 @@ public class ObserverClass extends Observer {
         sklad.AddObserver(this);
     }
 
+    /**
+     * @param truck - vozidlo
+     * @param dispecing - dispecing
+     * @param console - textField pre observer
+     */
     public ObserverClass(Truck truck, Dispecing dispecing, TextField console){
         this.truck = truck;
         this.console = console;
@@ -27,12 +32,12 @@ public class ObserverClass extends Observer {
 
     @Override
     public void ObserveItems() {
-        console.appendText("Tovar ID: " + sklad.getNaskladneny_tovar().lastElement().getIdColumnProperty() + "\n");
+        console.appendText("Tovar ID: "+ sklad.getNaskladneny_tovar().lastElement().getIdColumnProperty().toString() +"\n");
     }
 
     @Override
     public void Update() {
-        console.appendText("Bol pridany tovar - ID: "+sklad.getNaskladneny_tovar().lastElement().getIdColumnProperty()+"\n");
+        console.appendText("Bol pridany tovar - ID: " + sklad.getNaskladneny_tovar().lastElement().getIdColumnProperty()+"\n");
     }
 
     @Override

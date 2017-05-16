@@ -103,6 +103,11 @@ public class Dispecing {
         CentralneSklady.add(new Sklad(mesto));
     }
 
+    /**
+     *
+     * @param index - index skladu
+     * @param sklad
+     */
     public void setCentralneSklady(int index, Sklad sklad){
         CentralneSklady.set(index, sklad);
     }

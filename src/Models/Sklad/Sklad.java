@@ -3,9 +3,6 @@ package Models.Sklad;
 import Models.Observer.Observer;
 import Models.Tovar.Tovar;
 import Models.Truck.Truck;
-import Models.Truck.OrdinaryTruck;
-import Models.Truck.HeavyTruck;
-import Models.Truck.FastTruck;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -54,6 +51,9 @@ public class Sklad {
 
     //-------OBSERVER------
 
+    /**
+     * @param observer
+     */
     public void AddObserver(Observer observer)
     {
         observers.add(observer);
@@ -79,6 +79,10 @@ public class Sklad {
         return this.naskladneny_tovar;
     }
 
+    /**
+     * @param index
+     * @return Truck
+     */
     public Truck getDodavkaAtIndex(int index){
         return vyslane_dodavky.get(index);
     }
@@ -91,22 +95,48 @@ public class Sklad {
     //-------GETTERS-------
 
     //-------SETTERS-------
+
+    public void setTableDataAtIndex(int index, Tovar newTovar){
+        this.tableData.set(index,newTovar);
+    }
+    public void setNaskladnenyTovarAtIndex(int index, Tovar newTovar){
+        this.naskladneny_tovar.set(index,newTovar);
+    }
+
+
+    /**
+     * @param tovar
+     */
     public void setTableData(Tovar tovar) {
         this.tableData.add(tovar);
     }
 
+    /**
+     * @param newTovar
+     */
     public void setNaskladneny_tovar(Tovar newTovar) {
         this.naskladneny_tovar.add(newTovar);
     }
 
+    /**
+     * @param newTruck
+     */
     public void setVyslane_dodavky(Truck newTruck) {
         this.vyslane_dodavky.add(newTruck);
     }
 
+    /**
+     *
+     * @param nazov
+     */
     public void setNazov(String nazov) {
         this.nazov = nazov;
     }
 
+    /**
+     *
+     * @param index
+     */
     public void removeDodavka(int index) {
         this.vyslane_dodavky.remove(index);
     }
