@@ -6,4 +6,5 @@ package Models.Tracker;
 public interface Route {
     void setTimer(int initialTime);
     void setOnRoute(int time);
+    void SortBeforeRoute(int left, int right);
 }

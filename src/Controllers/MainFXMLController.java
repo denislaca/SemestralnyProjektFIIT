@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.Observer.ObserverClass;
 import Models.Sklad.*;
 import Models.Tovar.Tovar;
 import Models.Truck.Truck;
@@ -19,7 +20,6 @@ public class MainFXMLController implements Initializable{
     @FXML public Button addWaresButton;
     @FXML public CheckBox fragileCheck;
     @FXML public ChoiceBox warehouseChoice;
-    @FXML public ChoiceBox warehouseChoiceButton;
     @FXML public TextField weightInput;
     @FXML public TextField deliveryDateInput;
     @FXML public TextField destinationInput;
@@ -36,17 +36,18 @@ public class MainFXMLController implements Initializable{
     @FXML public TableColumn<Truck, String> originColumn;
     @FXML public TableColumn<Truck, String> timeRemainingColumn;
     @FXML public TableColumn<Truck, String> truckDestinationColumn;
-
+    @FXML public ComboBox warehouseChoiceBox;
+    @FXML public TextField customerConsole;
 
     private Tovar tempTovar;
     private Dispecing dispecing;
-    private TableViewPopulator populator;
     private static int hashID=0;
+    private TrucksTablePopulator populator;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("Initializing FXML");
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("Bratislava");
         list.add("Trnava");
         list.add("Nitra");
@@ -63,49 +64,64 @@ public class MainFXMLController implements Initializable{
         warehouseDateColumn.setCellValueFactory(new PropertyValueFactory<Tovar, String>("dateColumnProperty"));
 
         // - Initialize trucks table  - set cell value factors
-        truckIDColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>(""));
-        totalWeightColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>(""));
-        originColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>(""));
-        timeRemainingColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>(""));
-        truckDestinationColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>(""));
+        truckIDColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>("truckIDColumn"));
+        totalWeightColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>("totalWeightColumn"));
+        originColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>("warehouseColumn"));
+        timeRemainingColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>("timeRemainingColumn"));
+        truckDestinationColumn.setCellValueFactory(new PropertyValueFactory<Truck, String>("destinationColumn"));
 
         ObservableList warehouseList = FXCollections.observableList(list);
 
         warehouseChoice.getItems().clear();
         warehouseChoice.setItems(warehouseList);
         warehouseChoice.setValue("Bratislava");
-        warehouseChoiceButton.getItems().clear();
-        warehouseChoiceButton.setValue("Bratislava");
+        warehouseChoiceBox.getItems().clear();
+        warehouseChoiceBox.setItems(warehouseList);
+        warehouseChoiceBox.setValue("Bratislava");
 
         dispecing = new Dispecing();
-        populator = new TableViewPopulator();
+        populator = new TrucksTablePopulator();
         System.out.println("Done Initializing FXML");
     }
 
     public void CalculatePrice() {
         System.out.println("Start CalculatePrice");
-        tempTovar = new Tovar(
-                Integer.parseInt(weightInput.getText()),
-                warehouseChoice.getValue().toString(),
-                destinationInput.getText(),
-                Integer.parseInt(deliveryDateInput.getText()),
-                fragileCheck.isSelected()
-        );
-        priceInput.setText(String.format("%.2f%n", tempTovar.getCena()));
+        try {
+            tempTovar = new Tovar(
+                    Integer.parseInt(weightInput.getText()),
+                    warehouseChoice.getValue().toString(),
+                    destinationInput.getText(),
+                    Integer.parseInt(deliveryDateInput.getText()),
+                    fragileCheck.isSelected()
+            );
+
+            priceInput.setText(String.format("%.2f%n", tempTovar.getCena()));
+
+        } catch (NumberFormatException ex) {
+            System.out.print("NumberFormatExeption - ");
+            System.out.println(ex.getMessage());
+        }
         System.out.println("Done CalculatePrice");
     }
 
-    public void filterTable(){
-        warehouseTableController.getItems().clear();
-        ObservableList<Tovar> obList = FXCollections.observableArrayList();
-        obList.setAll(populator.filter(populator.getTableData(),warehouseChoiceButton.getValue().toString()));
-        if(obList.size()>0)
-            warehouseTableController.setItems(obList);
-    }
+    /*private int kapacita;
+    private int rychlost;
+    private int zataz;
+    private Vector<Tovar> nalozenyTovar;
+    private int time;
+    private Timer timer = new Timer();
+    */
 
     public void ActivateTrucks(){
-        dispecing.activateTrucks();
-        trucksTableController.setItems(dispecing.parseForView(dispecing.getActiveTrucks()));
+        warehouseTableController.getItems().clear();
+        dispecing.activateTrucks(warehouseChoiceBox.getValue().toString());
+        for(Truck truck : dispecing.getActiveTrucks()){
+            dispecing.AddObserver( new ObserverClass(truck, dispecing, customerConsole));
+            truck.setTotalWeightColumn(Integer.toString(truck.getZataz()));
+           // truck.setTruckIDColumn(Integer.toString());
+        }
+
+
     }
 
     public void EditItem(){
@@ -116,6 +132,14 @@ public class MainFXMLController implements Initializable{
 
     }
 
+    public void FilterList(){
+        int index = dispecing.getIntexOfSklad(warehouseChoiceBox.getValue().toString());
+        Sklad sklad = dispecing.getSklady(index);
+        System.out.println("Filter list for " + sklad.getNazov());
+        warehouseTableController.setItems(sklad.getTableData());
+        System.out.println("Finish filtering");
+
+    }
 
     public void addTovar(){
         System.out.println("Start addTovar");
@@ -130,16 +154,24 @@ public class MainFXMLController implements Initializable{
 
         Sklad sklad = dispecing.getSklady(index);
         sklad.setNaskladneny_tovar(tempTovar);
+        try {
+            sklad.setTableData(new Tovar(
+                    Integer.toString(tempTovar.Hash(tempTovar.getSklad())+hashID++),
+                    Integer.toString(tempTovar.getHmotnost()),
+                    tempTovar.getDodanie(),
+                    String.format("%.2f%n",tempTovar.getCena()),
+                    Integer.toString(tempTovar.getDodaciaLehota())
+            ));
+        } catch (NumberFormatException ex) {
+            System.out.print("NumberFormatExeption - ");
+            System.out.println(ex.getMessage());
+        }
+        ObserverClass observe = new ObserverClass(sklad, customerConsole);
+        sklad.AddObserver(observe);
         dispecing.setCentralneSklady(index, sklad);
-        populator.setTableData(new Tovar(
-                Integer.toString(tempTovar.Hash(tempTovar.getSklad())+hashID++),
-                Integer.toString(tempTovar.getHmotnost()),
-                tempTovar.getDodanie(),
-                String.format("%.2f%n",tempTovar.getCena()),
-                Integer.toString(tempTovar.getDodaciaLehota())
-        ));
+        sklad.ObserveLast();
         System.out.println("Done addTovar");
-        warehouseTableController.setItems(populator.getTableData());
+        warehouseTableController.setItems(sklad.getTableData());
         System.out.println("Done AddToTable");
     }
 

@@ -26,6 +26,6 @@ public class HeavyTruck extends Truck implements Tracker {
         return 0;
     }
 
-    public void callback(){ }
+    public void callback(){ setTime(getTime()/2);}
     //-------METHODS-------
 }
