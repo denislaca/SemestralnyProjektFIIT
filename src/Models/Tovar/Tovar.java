@@ -1,8 +1,8 @@
 package Models.Tovar;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import Models.Observer.Observer;
+import Models.Tracker.Tracker;
+import javafx.scene.control.TextField;
 
 import java.util.Random;
 
@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
 /**
  * Created by Denis-iMac on 26.3.17.
  */
-public class Tovar {
+public class Tovar implements Tracker {
     private double cena;
     private int hmotnost;
     private int vzdialenost;
@@ -19,6 +19,7 @@ public class Tovar {
     private int dodaciaLehota;
     private boolean fragile;
     private String dodanie;
+    private TextField console;
 
     public Tovar(int hmotnost, String sklad, String dodanie, int dodaciaLehota, boolean fragile) {
         setHmotnost(hmotnost);
@@ -46,6 +47,10 @@ public class Tovar {
     //-------POPULATE------
 
     //-------METHODS-------
+
+    /**
+     * pomocou hashu skladajuceho sa zo skladu a miesta dodania vypocita cenu prepravy
+     */
     private void calcPrice() {
         Random random = new Random();
         int distance = Hash(getSklad()+getDodanie());
@@ -54,8 +59,14 @@ public class Tovar {
         if(isFragile())
             setCena(getCena()+2);
         System.out.println(getCena());
+        observeItems();
     }
 
+    /**
+     * Hash funkcia - zretazi dva stringy a z nich vypocita hash pre danu kombinaciu
+     * @param string
+     * @return
+     */
     public int Hash(String string){
         int sum = 0;
         for(int i = 0; i < string.length(); i++) {
@@ -65,6 +76,13 @@ public class Tovar {
         return Math.abs(sum);
     }
     //-------METHODS-------
+
+    //-------OBSERVE-------
+    public void observeItems(){
+
+    };
+
+    //-------OBSERVE-------
 
     //-------GETTERS-------
     public double getCena() {

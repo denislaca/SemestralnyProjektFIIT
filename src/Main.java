@@ -11,6 +11,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("View/gui.fxml"));
         primaryStage.setTitle("Spedicna firma");
         primaryStage.setScene(new Scene(root, 700, 400));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
