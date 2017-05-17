@@ -34,14 +34,26 @@ public class Dispecing {
     }
 
     //-------METHODS-------
+
+    /**
+     * premiestni tovar z jedneho skladu do ineho
+     * @param fromWarehouse
+     * @param toWarehouse
+     * @param itemIndex
+     */
     public void moveItem(Sklad fromWarehouse, Sklad toWarehouse, int itemIndex){
-        Tovar temp = fromWarehouse.getNaskladneny_tovar().get(itemIndex);
+        Tovar temp = fromWarehouse.getTableData().get(itemIndex);
         fromWarehouse.getNaskladneny_tovar().remove(itemIndex);
         fromWarehouse.getTableData().remove(itemIndex);
+
         toWarehouse.setNaskladneny_tovar(temp);
         toWarehouse.setTableData(temp);
     }
 
+    /**
+     * Naplni dodavky rozneho typu tovarom
+     * @param selected_warehouse
+     */
     public void activateTrucks(String selected_warehouse) {
         if (selected_warehouse == "All") {
             for (int i = 0; i < CentralneSklady.size(); i++) {
@@ -72,7 +84,7 @@ public class Dispecing {
     }
 
     public void AllertObservers(){
-            observers.get(observers.size()-1).ObserveTrucks();
+            observers.get(observers.size()-1).Observe();
     }
 
     //-------OBSERVER------

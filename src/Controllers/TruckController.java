@@ -42,7 +42,7 @@ public class TruckController implements Initializable{
     }
 
     /**
-     * Upravi vybrany produnkt na aktualne hodnoty
+     * Upravi vybranu dodavku na aktualne hodnoty
      */
     public void EditInspectedTruck(){
         int indexTruck = truckTableController.getSelectionModel().getSelectedIndex();

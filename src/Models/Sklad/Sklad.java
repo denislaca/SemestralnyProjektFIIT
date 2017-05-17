@@ -33,6 +33,11 @@ public class Sklad {
     }
     //-------METHODS-------
 
+    /**
+     * Vysle dodavky na rozvoz
+     * @param truck
+     * @return
+     */
     public Vector<Truck> sendTrucks(Truck truck){
         while(naskladneny_tovar.size()>0) {
             truck.loadTruck(getNaskladneny_tovar().lastElement());
@@ -62,7 +67,7 @@ public class Sklad {
 
     public void AllertObservers(){
         for (Observer observer : observers) {
-            observer.ObserveItems();
+            observer.Observe();
         }
     }
 
@@ -118,8 +123,8 @@ public class Sklad {
     /**
      * @param tovar
      */
-    public void setTableData(Tovar tovar) {
-        this.tableData.add(tovar);
+    public void setTableData(Tovar... tovar) {
+        this.tableData.addAll(tovar);
     }
 
     /**
@@ -151,5 +156,7 @@ public class Sklad {
     public void removeDodavka(int index) {
         this.vyslane_dodavky.remove(index);
     }
+
+
     //-------SETTERS-------
 }

@@ -5,7 +5,6 @@ import Models.Sklad.Sklad;
 import Models.Tovar.Tovar;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -59,12 +58,14 @@ public class InspectController implements Initializable{
         Sklad sklad = dispecing.getSklady(index);
         Tovar tovar = sklad.getNaskladneny_tovar().get(indexTovar);
 
-        if(tovar.getSklad().compareTo(warehouseInspect.getText())!=0)
+        if(tovar.getSklad().compareTo(warehouseInspect.getText()) != 0) {
             dispecing.moveItem(
                     dispecing.getSklady(dispecing.getIntexOfSklad(tovar.getSklad())),
                     dispecing.getSklady(dispecing.getIntexOfSklad(warehouseInspect.getText())),
                     indexTovar
             );
+            sklad = dispecing.getSklady(dispecing.getIntexOfSklad(warehouseInspect.getText()));
+        }
 
         tovar.setItemWeightColumnProperty(weightInspect.getText());
         tovar.setItemDestinationColumnProperty(destinationInspect.getText());

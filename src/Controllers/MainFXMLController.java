@@ -1,6 +1,8 @@
 package Controllers;
 
-import Models.Observer.ObserverClass;
+import Models.Observer.Observer;
+import Models.Observer.ObserverItem;
+import Models.Observer.ObserverTruck;
 import Models.Sklad.*;
 import Models.Tovar.Tovar;
 import Models.Truck.Truck;
@@ -12,9 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -122,6 +122,10 @@ public class MainFXMLController implements Initializable{
         System.out.println("Done CalculatePrice");
     }
 
+    /**
+     * Aktivuje dodavky
+     */
+
     public void ActivateTrucks(){
         System.out.println("Sending trucks");
         dispecing.activateTrucks(warehouseChoiceBox.getValue().toString());
@@ -130,7 +134,7 @@ public class MainFXMLController implements Initializable{
         populator.clearTableData();
         for(Truck truck : dispecing.getActiveTrucks()){
             System.out.println(truck.toString());
-            dispecing.AddObserver( new ObserverClass(truck, dispecing, customerConsole));
+            dispecing.AddObserver( new ObserverTruck(truck, dispecing, customerConsole));
             truck.setTotalWeightColumn(Integer.toString(truck.getZataz()));
             truck.setTruckIDColumn(Integer.toString(populator.getID()));
             populator.setID();
@@ -138,7 +142,7 @@ public class MainFXMLController implements Initializable{
             truck.setWarehouseColumn(truck.getNalozenyTovar().lastElement().getSklad());
             truck.setTimeRemainingColumn(Integer.toString(truck.getNalozenyTovar().lastElement().getVzdialenost()%10009));
             populator.setTableData(truck);
-            ObserverClass observe = new ObserverClass(truck,dispecing, customerConsole);
+            Observer observe = new ObserverTruck(truck,dispecing, customerConsole);
             dispecing.AddObserver(observe);
             dispecing.AllertObservers();
         }
@@ -177,10 +181,9 @@ public class MainFXMLController implements Initializable{
 
     }
 
-    public void RequestTruck(){
-
-    }
-
+    /**
+     * Upravi uz vyslanu dodavku
+     */
     public void EditTruck(){
         int indexTovar = trucksTableController.getSelectionModel().getSelectedIndex();
         if(indexTovar == -1) {
@@ -246,7 +249,8 @@ public class MainFXMLController implements Initializable{
         } catch (WrongFormatException ex) {
             ex.VypisPricinu();
         }
-        ObserverClass observe = new ObserverClass(sklad, customerConsole);
+        sklad.getTableData().get(sklad.getTableData().size()-1).setSklad(tempTovar.getSklad());
+        Observer observe = new ObserverItem(sklad, customerConsole);
         sklad.AddObserver(observe);
         dispecing.setCentralneSklady(index, sklad);
         sklad.ObserveLast();

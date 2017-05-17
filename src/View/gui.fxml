@@ -65,7 +65,6 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="requestTruckButton" layoutX="550.0" layoutY="60.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Request Truck" />
                                     <Button fx:id="inspectTruckButton" layoutX="550.0" layoutY="20.0" onAction="#EditTruck" mnemonicParsing="false" prefHeight="28.0" prefWidth="140.0" text="Inspect Truck" textAlignment="CENTER" />
                                     <TableView fx:id="trucksTableController" layoutX="5.0" prefHeight="335.0" prefWidth="526.0">
                                        <columnResizePolicy>
@@ -75,7 +74,7 @@
                                           <TableColumn fx:id="truckIDColumn" prefWidth="75.0" text="Truck ID" />
                                           <TableColumn fx:id="totalWeightColumn" prefWidth="75.0" text="Total weight" />
                                           <TableColumn fx:id="originColumn" prefWidth="75.0" text="Warehouse" />
-                                          <TableColumn fx:id="timeRemainingColumn" prefWidth="120.57034301757812" text="Time Remaining" />
+                                          <TableColumn fx:id="timeRemainingColumn" prefWidth="120.57034301757812" text="Time Sent" />
                                           <TableColumn fx:id="truckDestinationColumn" prefWidth="63.429718017578125" text="Destination" />
                                        </columns>
                                        <opaqueInsets>

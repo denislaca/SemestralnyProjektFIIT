@@ -6,7 +6,6 @@ package Models.Observer;
 
 public abstract class Observer {
     public abstract void Update();
-    public abstract void ObserveItems();
-    public abstract void ObserveTrucks();
+    public abstract void Observe();
 }
 

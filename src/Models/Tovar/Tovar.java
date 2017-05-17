@@ -47,6 +47,10 @@ public class Tovar implements Tracker {
     //-------POPULATE------
 
     //-------METHODS-------
+
+    /**
+     * pomocou hashu skladajuceho sa zo skladu a miesta dodania vypocita cenu prepravy
+     */
     private void calcPrice() {
         Random random = new Random();
         int distance = Hash(getSklad()+getDodanie());
@@ -58,6 +62,11 @@ public class Tovar implements Tracker {
         observeItems();
     }
 
+    /**
+     * Hash funkcia - zretazi dva stringy a z nich vypocita hash pre danu kombinaciu
+     * @param string
+     * @return
+     */
     public int Hash(String string){
         int sum = 0;
         for(int i = 0; i < string.length(); i++) {

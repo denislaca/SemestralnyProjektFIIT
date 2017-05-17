@@ -22,10 +22,5 @@ public class HeavyTruck extends Truck implements Tracker {
         super.loadTruck(tovar);
     }
 
-    public int track(){
-        return 0;
-    }
-
-    public void callback(){ setTime(getTime()/2);}
     //-------METHODS-------
 }
