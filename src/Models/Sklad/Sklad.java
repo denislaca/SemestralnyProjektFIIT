@@ -33,10 +33,11 @@ public class Sklad {
     }
     //-------METHODS-------
 
-        //NEEDS WORK
     public Vector<Truck> sendTrucks(Truck truck){
-        for(int i = 0; i<naskladneny_tovar.size(); i++)
-            truck.loadTruck(getNaskladneny_tovar().get(i));
+        while(naskladneny_tovar.size()>0) {
+            truck.loadTruck(getNaskladneny_tovar().lastElement());
+            getNaskladneny_tovar().remove(getNaskladneny_tovar().size()-1);
+        }
         vyslane_dodavky.add(truck);
         return vyslane_dodavky;
     }
@@ -96,13 +97,23 @@ public class Sklad {
 
     //-------SETTERS-------
 
+    /**
+     *
+     * @param index
+     * @param newTovar
+     */
     public void setTableDataAtIndex(int index, Tovar newTovar){
         this.tableData.set(index,newTovar);
     }
+
+    /**
+     *
+     * @param index
+     * @param newTovar
+     */
     public void setNaskladnenyTovarAtIndex(int index, Tovar newTovar){
         this.naskladneny_tovar.set(index,newTovar);
     }
-
 
     /**
      * @param tovar

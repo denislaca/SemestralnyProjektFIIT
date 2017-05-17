@@ -3,6 +3,7 @@ package Models.Observer;
 import Models.Sklad.Dispecing;
 import Models.Sklad.Sklad;
 import Models.Truck.Truck;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 /**
@@ -11,9 +12,9 @@ import javafx.scene.control.TextField;
 public class ObserverClass extends Observer {
     private Sklad sklad;
     private Truck truck;
-    private TextField console;
+    private TextArea console;
 
-    public ObserverClass(Sklad sklad, TextField console){
+    public ObserverClass(Sklad sklad, TextArea console){
         this.sklad = sklad;
         this.console = console;
         sklad.AddObserver(this);
@@ -24,7 +25,7 @@ public class ObserverClass extends Observer {
      * @param dispecing - dispecing
      * @param console - textField pre observer
      */
-    public ObserverClass(Truck truck, Dispecing dispecing, TextField console){
+    public ObserverClass(Truck truck, Dispecing dispecing, TextArea console){
         this.truck = truck;
         this.console = console;
         dispecing.AddObserver(this);
@@ -32,12 +33,12 @@ public class ObserverClass extends Observer {
 
     @Override
     public void ObserveItems() {
-        console.appendText("Tovar ID: "+ sklad.getNaskladneny_tovar().lastElement().getIdColumnProperty().toString() +"\n");
+        console.appendText("Tovar ID: "+ sklad.getTableData().get(sklad.getTableData().size()-1).getIdColumnProperty() +"\n");
     }
 
     @Override
     public void Update() {
-        console.appendText("Bol pridany tovar - ID: " + sklad.getNaskladneny_tovar().lastElement().getIdColumnProperty()+"\n");
+        console.appendText("Bol pridany tovar - ID: " + sklad.getTableData().get(sklad.getTableData().size()-1).getIdColumnProperty() +"\n");
     }
 
     @Override

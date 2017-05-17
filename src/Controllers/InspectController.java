@@ -22,9 +22,10 @@ public class InspectController implements Initializable{
     @FXML public TextField destinationInspect;
     @FXML public TextField priceInspect;
     @FXML public TextField dateInspect;
+    @FXML public TextField warehouseInspect;
 
-    public TableView<Tovar> warehouseTableController;
-    public ComboBox warehouseChoiceBox;
+    private TableView<Tovar> warehouseTableController;
+    private ComboBox warehouseChoiceBox;
     private Dispecing dispecing;
 
     private String ID;
@@ -42,21 +43,36 @@ public class InspectController implements Initializable{
         destinationInspect.setText(tovar.getItemDestinationColumnProperty());
         priceInspect.setText(tovar.getPriceColumnProperty());
         dateInspect.setText(tovar.getDateColumnProperty());
+        warehouseInspect.setText(tovar.getSklad());
         ID = tovar.getIdColumnProperty();
     }
 
+    /**
+     * Upravi vybrany produnkt na aktualne hodnoty
+     */
     public void EditInspectedItem(){
         int indexTovar = warehouseTableController.getSelectionModel().getSelectedIndex();
         int index = dispecing.getIntexOfSklad(warehouseChoiceBox.getValue().toString());
+
         if(index < 0 || indexTovar < 0)
             return;
         Sklad sklad = dispecing.getSklady(index);
         Tovar tovar = sklad.getNaskladneny_tovar().get(indexTovar);
+
+        if(tovar.getSklad().compareTo(warehouseInspect.getText())!=0)
+            dispecing.moveItem(
+                    dispecing.getSklady(dispecing.getIntexOfSklad(tovar.getSklad())),
+                    dispecing.getSklady(dispecing.getIntexOfSklad(warehouseInspect.getText())),
+                    indexTovar
+            );
+
         tovar.setItemWeightColumnProperty(weightInspect.getText());
         tovar.setItemDestinationColumnProperty(destinationInspect.getText());
         tovar.setPriceColumnProperty(priceInspect.getText());
         tovar.setDateColumnProperty(dateInspect.getText());
         tovar.setIdColumnPropery(ID);
+        tovar.setSklad(warehouseInspect.getText());
+
         sklad.setNaskladnenyTovarAtIndex(indexTovar,tovar);
         sklad.setTableDataAtIndex(indexTovar,tovar);
     }

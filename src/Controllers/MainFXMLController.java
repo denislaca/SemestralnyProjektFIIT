@@ -47,12 +47,18 @@ public class MainFXMLController implements Initializable{
     @FXML public TableColumn<Truck, String> timeRemainingColumn;
     @FXML public TableColumn<Truck, String> truckDestinationColumn;
     @FXML public ComboBox warehouseChoiceBox;
-    @FXML public TextField customerConsole;
+    @FXML public TextArea customerConsole;
 
     private Tovar tempTovar;
     private Dispecing dispecing;
     private static int hashID=0;
     private TrucksTablePopulator populator;
+
+    class WrongFormatException extends NumberFormatException{
+        public void VypisPricinu(){
+            System.out.println("Cannot parse input - wrong format");
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -94,6 +100,9 @@ public class MainFXMLController implements Initializable{
         System.out.println("Done Initializing FXML");
     }
 
+    /**
+     * Vypocita cenu produktu
+     */
     public void CalculatePrice() {
         System.out.println("Start CalculatePrice");
         try {
@@ -107,23 +116,37 @@ public class MainFXMLController implements Initializable{
 
             priceInput.setText(String.format("%.2f%n", tempTovar.getCena()));
 
-        } catch (NumberFormatException ex) {
-            System.out.print("NumberFormatExeption - ");
-            System.out.println(ex.getMessage());
+        } catch (WrongFormatException ex) {
+            ex.VypisPricinu();
         }
         System.out.println("Done CalculatePrice");
     }
 
     public void ActivateTrucks(){
-        warehouseTableController.getItems().clear();
+        System.out.println("Sending trucks");
         dispecing.activateTrucks(warehouseChoiceBox.getValue().toString());
+        if(dispecing.getSklady(dispecing.getIntexOfSklad(warehouseChoiceBox.getValue().toString())).getTableData().size()==0)
+            return;
+        populator.clearTableData();
         for(Truck truck : dispecing.getActiveTrucks()){
+            System.out.println(truck.toString());
             dispecing.AddObserver( new ObserverClass(truck, dispecing, customerConsole));
             truck.setTotalWeightColumn(Integer.toString(truck.getZataz()));
-           // truck.setTruckIDColumn(Integer.toString());
+            truck.setTruckIDColumn(Integer.toString(populator.getID()));
+            populator.setID();
+            truck.setDestinationColumn(truck.getNalozenyTovar().lastElement().getDodanie());
+            truck.setWarehouseColumn(truck.getNalozenyTovar().lastElement().getSklad());
+            truck.setTimeRemainingColumn(Integer.toString(truck.getNalozenyTovar().lastElement().getVzdialenost()%10009));
+            populator.setTableData(truck);
+            ObserverClass observe = new ObserverClass(truck,dispecing, customerConsole);
+            dispecing.AddObserver(observe);
+            dispecing.AllertObservers();
         }
 
+        warehouseTableController.getItems().clear();
+        trucksTableController.setItems(populator.getTableData());
 
+        System.out.println("Done sending trucks");
     }
 
     /**
@@ -150,6 +173,36 @@ public class MainFXMLController implements Initializable{
         }
 
         System.out.println("Selected item at index " + Integer.toString(indexTovar));
+
+
+    }
+
+    public void RequestTruck(){
+
+    }
+
+    public void EditTruck(){
+        int indexTovar = trucksTableController.getSelectionModel().getSelectedIndex();
+        if(indexTovar == -1) {
+            System.out.println("No truck selected");
+            return;
+        }
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../View/truck.fxml"));
+            fxmlLoader.setController(new TruckController(trucksTableController, dispecing));
+            Parent root = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Inspect Item");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+
+        ActivateTrucks();
+        System.out.println("Selected truck at index " + Integer.toString(indexTovar));
 
 
     }
@@ -190,9 +243,8 @@ public class MainFXMLController implements Initializable{
                     String.format("%.2f%n",tempTovar.getCena()),
                     Integer.toString(tempTovar.getDodaciaLehota())
             ));
-        } catch (NumberFormatException ex) {
-            System.out.print("NumberFormatExeption - ");
-            System.out.println(ex.getMessage());
+        } catch (WrongFormatException ex) {
+            ex.VypisPricinu();
         }
         ObserverClass observe = new ObserverClass(sklad, customerConsole);
         sklad.AddObserver(observe);
@@ -200,10 +252,6 @@ public class MainFXMLController implements Initializable{
         sklad.ObserveLast();
         System.out.println("Done addTovar");
         warehouseTableController.setItems(sklad.getTableData());
-        //dolezity riadok -
-        warehouseChoiceBox.getSelectionModel().getSelectedItem();
-        warehouseChoiceBox.getSelectionModel().getSelectedIndex();
-        // koniec dolezitym riadkom
         System.out.println("Done AddToTable");
     }
 

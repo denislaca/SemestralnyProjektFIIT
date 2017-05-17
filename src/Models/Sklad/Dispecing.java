@@ -56,8 +56,8 @@ public class Dispecing {
             Sklad sklad = getSklady(getIntexOfSklad(selected_warehouse));
             while(sklad.getNaskladneny_tovarSize() > 0) {
                 ActiveTrucks.addAll(sklad.sendTrucks(new OrdinaryTruck()));
-                ActiveTrucks.addAll(sklad.sendTrucks(new HeavyTruck()));
-                ActiveTrucks.addAll(sklad.sendTrucks(new OrdinaryTruck()));
+                if(sklad.getNaskladneny_tovarSize() > 0) ActiveTrucks.addAll(sklad.sendTrucks(new HeavyTruck()));
+                if(sklad.getNaskladneny_tovarSize() > 0) ActiveTrucks.addAll(sklad.sendTrucks(new OrdinaryTruck()));
             }
         }
     }
@@ -72,9 +72,7 @@ public class Dispecing {
     }
 
     public void AllertObservers(){
-        for (Observer observer : observers) {
-            observer.ObserveTrucks();
-        }
+            observers.get(observers.size()-1).ObserveTrucks();
     }
 
     //-------OBSERVER------

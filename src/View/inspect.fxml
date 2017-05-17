@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="342.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="309.0" prefWidth="342.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TextField fx:id="weightInspect" layoutX="36.0" layoutY="36.0" />
       <Label layoutX="36.0" layoutY="14.0" text="Weight" />
@@ -14,6 +14,9 @@
       <TextField fx:id="priceInspect" layoutX="36.0" layoutY="151.0" />
       <Label layoutX="36.0" layoutY="189.0" text="Date" />
       <TextField fx:id="dateInspect" layoutX="36.0" layoutY="211.0" />
+      <Label layoutX="36.0" layoutY="246.0" text="Warehouse" />
+      <TextField fx:id="warehouseInspect" layoutX="36.0" layoutY="268.0" />
       <Button fx:id="EditInspectButton" layoutX="227.0" layoutY="36.0" mnemonicParsing="false" onAction="#EditInspectedItem" prefHeight="27.0" prefWidth="102.0" text="Edit" />
+
    </children>
 </AnchorPane>

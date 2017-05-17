@@ -21,7 +21,6 @@ public abstract class Truck implements Route,Tracker {
     private int zataz;
     private Vector<Tovar> nalozenyTovar;
     private int time;
-    private Timer timer = new Timer();
 
     private String truckIDColumn = new String("");
     private String totalWeightColumn = new String("");
@@ -43,12 +42,7 @@ public abstract class Truck implements Route,Tracker {
 
     @Override
     public void setTimer(int initialTime) {
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                time--;
-            }
-        }, (2*1000*initialTime)/getRychlost());
+
     }
 
     //-------METHODS-------
